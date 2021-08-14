@@ -56,13 +56,13 @@ def moveCords(x, y, cords: list) -> list:
         result.append((cord[0]+x, cord[1]+y))
     return result
 
-def rotateCords(degree, cords: list) -> list:
+def rotateCords(degree, x, y, cords: list) -> list:
     result = []
     degree = math.pi * (degree / 180)
     for cord in cords:
-        x = cord[0]*math.cos(degree) - cord[1]*math.sin(degree)
-        y = cord[0]*math.sin(degree) - cord[1]*math.cos(degree)
-        result.append((x,y))
+        newx = (cord[0]-x)*math.cos(degree) - (cord[1]-y)*math.sin(degree)
+        newy = (cord[0]-x)*math.sin(degree) - (cord[1]-y)*math.cos(degree)
+        result.append((newx,newy))
     return result
 
 def severCords(cordsList: list, blankCords: list) -> list:
