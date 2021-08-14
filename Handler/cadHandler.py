@@ -1,4 +1,5 @@
 import ezdxf
+import ArctObject
 
 # color information 
 # 1 = red -> 중심선
@@ -12,6 +13,13 @@ import ezdxf
 
 # TODO: layer별로 선 타입을 다시 지정해줘야함
 
+
+
+
+
+
+
+#  ---------------------------------------- end function definition ----------------------------------------
 
 # 이 클래스는 dxf를 다루기 위한 클래스
 # 함수를 다 여기다 넣을 예정입니다
@@ -65,22 +73,35 @@ class dxfHandler:
         # 실제로는 사이즈를 인식하고
         # 사이즈에 알맞은 창문을 넣어주는 형식으로 개발해야함
 
+    def drawDoor(self, door: ArctObject.Door) -> None:
+        self.msp.add
 
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 
 
-# How to use dxfHandler
-# Test and Example
-cords = [(0,0),(10,0),(10,10),(0,10),(0,0)]
+# # How to use dxfHandler
+# # Test and Example
+# cords = [(0,0),(10,0),(10,10),(0,10),(0,0)]
 
-# dxfHander 생성
-handler = dxfHandler()
+# # dxfHander 생성
+# handler = dxfHandler()
 
-# 벽과 창문 그리기
-handler.drawWall(cords)
-handler.drawWindow((100,100), (200,200))
+# # 벽과 창문 그리기
+# handler.drawWall(cords)
+# handler.drawWindow((100,100), (200,200))
 
-# 파일로 저장하기
-handler.saveDxf('test2.dxf')
+# # 파일로 저장하기
+# handler.saveDxf('test2.dxf')
 
+# room_2 = [rectangle2cords((-100,-100),(3100,3100)), rectangle2cords((0,0),(3000,3000))]
+# blank_2 = rectangle2cords((400,-100), (1400,0))
 
+# # print(room_2)
+# # print(blank_2)
+
+# result = severCords(room_2, blank_2)
+# print(result)
+# handler = dxfHandler.dxfHandler()
+# for re in result:
+#     handler.drawWall(re)
+# handler.saveDxf('test.dxf')

@@ -1,18 +1,9 @@
-
-# 여기서 하고 싶은 것은
-# 정리가 안된 좌표들(cord)을 dxfHander에서 처리할 수 있게 변환하는 것이다
-# 정리가 안된 좌표들을 순서에 맞게 재배열하고
-# 벽, 기둥, 창문, 문 등 각각의 layer에 맞게 분류하는 것이다
-
-# 아직 dictionary가 정해진 것이 없기 때문에 리스트나 다중리스트로 구현할 예정
-# 나중에 사용할 때에도 리스트로 변환만 하면 사용할 수 있도록 개발하도록 하자    
-
-        
+import math
 
 def rectangle2cords(leftBot: tuple, rightTop: tuple) -> list:
     leftTop = (leftBot[0], rightTop[1])
     rightBot = (rightTop[0], leftBot[1])
-    cords = [leftBot, leftTop, rightTop, rightBot, leftBot]
+    cords = [leftBot, rightBot, rightTop, leftTop, leftBot]
     return cords
 
 def isPointBetween(start: tuple, end: tuple, target: tuple) -> bool:
@@ -59,8 +50,20 @@ def swap(a: list):
     a[0] = a[1]
     a[1] = temp
 
+def moveCords(x, y, cords: list) -> list:
+    result = []
+    for cord in cords:
+        result.append((cord[0]+x, cord[1]+y))
+    return result
 
-
+def rotateCords(degree, cords: list) -> list:
+    result = []
+    degree = math.pi * (degree / 180)
+    for cord in cords:
+        x = cord[0]*math.cos(degree) - cord[1]*math.sin(degree)
+        y = cord[0]*math.sin(degree) - cord[1]*math.cos(degree)
+        result.append((x,y))
+    return result
 
 def severCords(cordsList: list, blankCords: list) -> list:
     # 좌하단부터 반시계방향으로 0(좌하)-1(우하)-2(우상)-3(좌상)
@@ -82,21 +85,22 @@ def severCords(cordsList: list, blankCords: list) -> list:
     lineLB = [cordsList[LBidx[0]][LBidx[1]], cordsList[LBidx[0]][LBidx[1]+1]]
     lineRT = [cordsList[RTidx[0]][RTidx[1]], cordsList[RTidx[0]][RTidx[1]+1]]
 
-    if isPointOnLine(cordsList[LBidx[0]][LBidx[1]],cordsList[LBidx[0]][LBidx[1]+1], blankCords[1]):
+    if isPointOnLine(lineLB[0],lineLB[1], blankCords[1]):
         # 0->3 , 2->1 케이스
-        if getClosePoint(lineLB[0], blankCords[0], blankCords[3]) == blankCords[3]:
+        if getClosePoint(lineLB[0], blankCords[0], blankCords[1]) == blankCords[1]:
             swap(lineLB)
-        if getClosePoint(lineRT[0], blankCords[2], blankCords[1]) == blankCords[1]:
+        if getClosePoint(lineRT[0], blankCords[2], blankCords[3]) == blankCords[3]:
             swap(lineRT)
             
         LBto = blankCords[3]
         RTto = blankCords[1]
     else:
         # 0->1, 2->3 케이스
-        if getClosePoint(lineLB[0], blankCords[0], blankCords[1]) == blankCords[1]:
+        if getClosePoint(lineLB[0], blankCords[0], blankCords[3]) == blankCords[3]:
             swap(lineLB)
-        if getClosePoint(lineRT[0], blankCords[2], blankCords[3]) == blankCords[3]:
+        if getClosePoint(lineRT[0], blankCords[2], blankCords[1]) == blankCords[1]:
             swap(lineRT)
+        
             
         LBto = blankCords[1]
         RTto = blankCords[3]
@@ -105,66 +109,45 @@ def severCords(cordsList: list, blankCords: list) -> list:
     resultList.append([lineLB[0], blankCords[0], LBto, lineRT[1]])
     resultList.append([lineRT[0], blankCords[2], RTto, lineLB[1]])
 
+    m = len(cordsList[RTidx[0]])-1
     if lineRT[0] == cordsList[RTidx[0]][RTidx[1]]: 
         dir = 1
-        idx = RTidx[1] + 2
+        idx = (RTidx[1] + 2) % m
     else: 
         dir = -1
-        idx = RTidx[1] - 1
-    m = len(cordsList[RTidx[0]])-1
+        idx = (RTidx[1] - 1) % m
+    
+    print("before first while loop")
     while True:
-        # 리스트의 마지막이 처음과 같거나 대척점과 같다면 루프문 탈출
+        # 리스트의 마지막이 처음과 같거나 대척점 전 점과 같다면 루프문 탈출
         if resultList[0][len(resultList[0])-1] == resultList[0][0]: break
-        if resultList[0][len(resultList[0])-1] == blankCords[2]: break
+        if resultList[0][len(resultList[0])-1] == lineRT[0]: break
 
         resultList[0].append(cordsList[RTidx[0]][idx%m])
         idx = idx + dir
 
+    m = len(cordsList[LBidx[0]])-1
     if lineLB[0] == cordsList[LBidx[0]][LBidx[1]]: 
         dir = 1
-        idx = LBidx[1] + 2
+        idx = (LBidx[1] + 2) % m
     else: 
         dir = -1
-        idx = LBidx[1] - 1
-    m = len(cordsList[LBidx[0]])-1
+        idx = (LBidx[1] - 1) % m    
+
+    print("before second while loop")
     while True:
         # 리스트의 마지막이 처음과 같거나 대척점과 같다면 루프문 탈출
         if resultList[1][len(resultList[1])-1] == resultList[1][0]: break
-        if resultList[1][len(resultList[1])-1] == blankCords[0]: break
+        if resultList[1][len(resultList[1])-1] == lineLB[0]: break
 
         resultList[1].append(cordsList[LBidx[0]][idx%m])
         idx = idx + dir
 
     if resultList[0][len(resultList[0])-1] == resultList[1][0]:
         resultList[0].pop()
-        resultList[0].append(resultList[1])
+        resultList[0] = resultList[0] + resultList[1]
         resultList.pop()
     
     return resultList
 
 
-# ------ for test ------------------------------------------------------------
-def printError(errorCode: int):
-    print("Error: {0}" .format(errorCode))
-
-def testFunctions():
-    # if isPointBetween((0,0), (10,10), (5,5)) == False:
-    #     print("Error 1")
-    
-    if isPointOnLine((0,0), (10,10), (5,5)) == False:
-        printError(1)
-
-    if isPointOnLine((0,0), (10,10), (4,5)) == True:
-        printError(2)
-
-    if getDistance((0,0), (10,0)) != 10:
-        printError(3)
-
-
-
-# ------ end function definitions ------------------------------------------------------------
-room = [[(0,0), (1000,0), (1000,1000), (800,1000), (800,200), (0,200), (0,0)]]
-blank = [(200,0), (400,0), (400, 200), (200, 200), (200,0)]
-
-result = severCords(room, blank)
-print(result)
