@@ -1,5 +1,5 @@
 import ezdxf
-import ArctObject
+
 
 # color information 
 # 1 = red -> 중심선
@@ -23,7 +23,7 @@ import ArctObject
 
 # 이 클래스는 dxf를 다루기 위한 클래스
 # 함수를 다 여기다 넣을 예정입니다
-class dxfHandler:
+class DxfHandler:
     
     # str을 변수로 구현
     LAYER_CENTER = 'cen'
@@ -50,31 +50,14 @@ class dxfHandler:
         self.doc.saveas(filename= filename)
 
 
-    def drawWall(self, cordsList: list) -> None:
+    def drawWall(self, cords: list) -> None:
         
         # 좌료 리스트에 있는 좌표들을 순서대로 그림
-        for i in range(0, len(cordsList)-1):
-            self.msp.add_line(cordsList[i], cordsList[i+1], dxfattribs={'layer': self.LAYER_WALL})
+        for i in range(0, len(cords)-1):
+            self.msp.add_line(cords[i], cords[i+1], dxfattribs={'layer': self.LAYER_WALL})
             
         # self.msp.add_line(cordsList[len(cordsList)-1], cordsList[0], dxfattribs={'layer': self.LAYER_WALL})
-
-
-    def drawWindow(self, leftBot: tuple, rightTop: tuple) -> None:
-    
-        leftTop = (leftBot[0], rightTop[1])
-        rightBot = (rightTop[0], leftBot[1])
-
-        # 일단은 간단하게 사각형으로 창문 위치만 표현해보자
-        self.msp.add_line(leftBot, leftTop, dxfattribs={'layer': self.LAYER_WINDOW})
-        self.msp.add_line(leftTop, rightTop, dxfattribs={'layer': self.LAYER_WINDOW})
-        self.msp.add_line(rightTop, rightBot, dxfattribs={'layer': self.LAYER_WINDOW})
-        self.msp.add_line(rightBot, leftBot, dxfattribs={'layer': self.LAYER_WINDOW})
-        
-        # 실제로는 사이즈를 인식하고
-        # 사이즈에 알맞은 창문을 넣어주는 형식으로 개발해야함
-
-    def drawDoor(self, door: ArctObject.Door) -> None:
-        self.msp.add
+   
 
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 

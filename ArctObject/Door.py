@@ -1,51 +1,42 @@
-import Handler.cordsHandler as cordsH
+from . import arctObject
+from Handler import cordsHandler as cordsH
 
-class Door:
-    ONE_DOOR = 'one door'
-    def __init__(self, leftBot: tuple, rightTop: tuple, attrib: dict) -> None:
-        self.leftBot = leftBot
-        self.rightTop = rightTop
+class Door(arctObject.ArctObject):
+    # attribute: 문에 사용되는 속성들
+    # 카테고리는 값 수정 못하게 튜플로 하자
+    types = ('normal_cw', 'normal_ccw', 'slide', 'double')
+    
+    def __init__(self, leftBot: tuple, rightTop: tuple, degree = 0, 
+                    typeIdx = 0, width = 1000, length = 200 ,frame = 50, thickness = 50) -> None:
         
-        if abs(leftBot[0] - rightTop[0]) > abs(leftBot[1] - rightTop[1]):
-            self.short = abs(leftBot[1] - rightTop[1])
-            self.long = abs(leftBot[0] - rightTop[0])
-        else:
-            self.long = abs(leftBot[1] - rightTop[1])
-            self.short = abs(leftBot[0] - rightTop[0])
-
-        # attribute
-        # type: onedoor, slide, twodoor
-        if attrib.get('type') != None: self.type = attrib.get('type')
-        else : self.type = self.ONE_DOOR
-
-        # direction: clock or counterclock
-        if attrib.get('isCW'): self.isCW = True
-        else: self.isCW = False
-
-        # degree: 0, 90, 180, 270
-        if attrib.get('degree') != None: self.degree = attrib.get('degree')
-        else: self.degree = 0
-
-        # door frame: default 50
-        if attrib.get('frame') != None: self.frame = attrib.get('frame')
-        else: self.frame = 50
-
-        # door thickness: default 40
-        if attrib.get('thickness') != None: self.thickness = attrib.get('thickness')
-        else: self.thickness = 50
-
-
-    def getCords(self) -> list:
-        result = []
-
-        leftFrame = [(0,0), (self.frame, 0), (self.frame, self.short), (0, self.short), (0,0)]
-        rightFrame = cordsH.moveCords(self.long - self.frame, 0, leftFrame)
-        door = [(0,0), (self.thickness,0), (self.thickness, self.long - 2*(self.frame)), (0, self.long - 2*(self.frame)), (0,0)]
-
-        if self.isCW:
-            door = cordsH.moveCords(self.frame, self.short, door)
-        else:
-            door = cordsH.moveCords(self.long - self.frame, self.short, door)
+        super(Door, self).__init__(leftBot, rightTop, degree)
         
+        # set attributes
+        if 0 <= typeIdx and typeIdx < len(self.types): 
+            self.typeIdx = typeIdx
+        else: self.typeIdx = 0
 
-        return [leftFrame, door, rightFrame]
+        self.width = width
+        self.length = length
+        self.frame = frame
+        self.thickness = thickness
+
+        # normal_cw
+        if typeIdx == 0:
+            # frame
+            self.cordsList.append(cordsH.rectangle2cords((0,0), (frame, length)))
+            self.cordsList.append(cordsH.rectangle2cords((width-frame, 0), (width, length)))
+            # door
+            temp = cordsH.rectangle2cords((0,0),(thickness,width-2*frame))
+            temp = cordsH.moveCords(temp, frame, length)
+            self.cordsList.append(temp)
+        # normal_ccw
+        elif typeIdx == 1:
+            # frame
+            self.cordsList.append(cordsH.rectangle2cords((0,0), (frame, length)))
+            self.cordsList.append(cordsH.rectangle2cords((width-frame,0), (width,length)))
+            # door
+            temp = cordsH.rectangle2cords((0,0),(thickness,width-2*frame))
+            temp = cordsH.moveCords(temp, width-frame-thickness, length)
+            self.cordsList.append(temp)
+        

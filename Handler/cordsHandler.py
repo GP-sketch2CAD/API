@@ -50,19 +50,27 @@ def swap(a: list):
     a[0] = a[1]
     a[1] = temp
 
-def moveCords(x, y, cords: list) -> list:
+def moveCords(cords: list, x, y) -> list:
     result = []
     for cord in cords:
         result.append((cord[0]+x, cord[1]+y))
     return result
 
-def rotateCords(degree, x, y, cords: list) -> list:
+def rotateCords(cords: list, degree, x=0, y=0) -> list:
+    """
+    counter clockwise rotate
+
+    # reference
+    https://java.elex.pe.kr/2016/05/transform-rotation.html
+    """
     result = []
-    degree = math.pi * (degree / 180)
+    sinD = math.sin(math.radians(degree))
+    cosD = math.cos(math.radians(degree))
+
     for cord in cords:
-        newx = (cord[0]-x)*math.cos(degree) - (cord[1]-y)*math.sin(degree)
-        newy = (cord[0]-x)*math.sin(degree) - (cord[1]-y)*math.cos(degree)
-        result.append((newx,newy))
+        newx = (cord[0]-x)*cosD - (cord[1]-y)*sinD
+        newy = (cord[1]-y)*cosD + (cord[0]-x)*sinD  
+        result.append((round(newx,2),round(newy,2)))
     return result
 
 def severCords(cordsList: list, blankCords: list) -> list:
