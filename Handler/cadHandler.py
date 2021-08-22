@@ -1,3 +1,4 @@
+from typing import Dict
 import ezdxf
 
 
@@ -12,14 +13,6 @@ import ezdxf
 
 
 # TODO: layer별로 선 타입을 다시 지정해줘야함
-
-
-
-
-
-
-
-#  ---------------------------------------- end function definition ----------------------------------------
 
 # 이 클래스는 dxf를 다루기 위한 클래스
 # 함수를 다 여기다 넣을 예정입니다
@@ -46,45 +39,17 @@ class DxfHandler:
     
     
     def saveDxf(self, filename: str) -> None:
-
         self.doc.saveas(filename= filename)
 
 
-    def drawWall(self, cords: list) -> None:
-        
-        # 좌료 리스트에 있는 좌표들을 순서대로 그림
+    def drawLine(self, cords: list, layer: str) -> None:
         for i in range(0, len(cords)-1):
-            self.msp.add_line(cords[i], cords[i+1], dxfattribs={'layer': self.LAYER_WALL})
+            self.msp.add_line(cords[i], cords[i+1], dxfattribs={'layer':layer})
             
-        # self.msp.add_line(cordsList[len(cordsList)-1], cordsList[0], dxfattribs={'layer': self.LAYER_WALL})
+    def drawLineCSL(self, cordsList: list, layer: str) -> None:
+        for cords in cordsList:
+            self.drawLine(cords, layer)
    
-
+     
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 
-
-# # How to use dxfHandler
-# # Test and Example
-# cords = [(0,0),(10,0),(10,10),(0,10),(0,0)]
-
-# # dxfHander 생성
-# handler = dxfHandler()
-
-# # 벽과 창문 그리기
-# handler.drawWall(cords)
-# handler.drawWindow((100,100), (200,200))
-
-# # 파일로 저장하기
-# handler.saveDxf('test2.dxf')
-
-# room_2 = [rectangle2cords((-100,-100),(3100,3100)), rectangle2cords((0,0),(3000,3000))]
-# blank_2 = rectangle2cords((400,-100), (1400,0))
-
-# # print(room_2)
-# # print(blank_2)
-
-# result = severCords(room_2, blank_2)
-# print(result)
-# handler = dxfHandler.dxfHandler()
-# for re in result:
-#     handler.drawWall(re)
-# handler.saveDxf('test.dxf')

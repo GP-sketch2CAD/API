@@ -21,11 +21,7 @@ def testDoorRotate() -> None:
 
     
     dxf = cadH.DxfHandler()
-    for m in myDoor.getCordsList():
-        dxf.drawWall(m)
-    for m in myDoor2.getCordsList():
-        dxf.drawWall(m)
-
+    dxf.drawLineCSL(myDoor.getCordsList(),dxf.LAYER_WINDOW)
     dxf.saveDxf('doortest.dxf')
     
 #--------------------------------------------------

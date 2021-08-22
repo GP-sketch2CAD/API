@@ -2,6 +2,7 @@ from . import arctObject
 from Handler import cordsHandler as cordsH
 
 class Door(arctObject.ArctObject):
+    # TODO: 문 이동 경로도 생각해야하는데.... 어떻게 해야할지 고민을 더 해야함
     # attribute: 문에 사용되는 속성들
     # 카테고리는 값 수정 못하게 튜플로 하자
     types = ('normal_cw', 'normal_ccw', 'slide', 'double')
@@ -39,4 +40,5 @@ class Door(arctObject.ArctObject):
             temp = cordsH.rectangle2cords((0,0),(thickness,width-2*frame))
             temp = cordsH.moveCords(temp, width-frame-thickness, length)
             self.cordsList.append(temp)
+        # TODO: slide, twodoor 생각해서 추가해야함 
         
