@@ -1,5 +1,5 @@
 from Handler import cordsHandler as cordH, cadHandler as cadH
-from ArctObject import door, arctObject
+from ArctObject import Door
 
 def testRotate() -> None:
     box = cordH.rectangle2cords((0,0),(1,2))
@@ -26,4 +26,7 @@ def testDoorRotate() -> None:
     
 #--------------------------------------------------
 
-testDoorRotate()
+for i in range(0,5):
+    if i == 2:
+        i+=1
+    print(i)

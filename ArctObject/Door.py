@@ -1,7 +1,7 @@
-from . import arctObject
+from ArctObject import ArctObject
 from Handler import cordsHandler as cordsH
 
-class Door(arctObject.ArctObject):
+class Door(ArctObject.ArctObject):
     # TODO: 문 이동 경로도 생각해야하는데.... 어떻게 해야할지 고민을 더 해야함
     # attribute: 문에 사용되는 속성들
     # 카테고리는 값 수정 못하게 튜플로 하자

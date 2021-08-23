@@ -1,2 +1,2 @@
-from . import cadHandler
-from . import cordsHandler
+from Handler import cadHandler
+from Handler import cordsHandler
