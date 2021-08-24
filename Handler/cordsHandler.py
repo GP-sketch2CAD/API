@@ -31,12 +31,12 @@ def getDistance(pointA: tuple, pointB: tuple) -> float:
 def getDistanceByPoints(X1, Y1, X2, Y2) -> float:
     return ((X1-X2)**2 + (Y1-Y2)**2)**0.5
 
-def getClosePoint(standard: tuple, pointA: tuple, pointB: tuple) -> tuple:
+def getClosePointIdx(standard: tuple, pointA: tuple, pointB: tuple) -> tuple:
     if getDistance(standard, pointA) < getDistance(standard, pointB):
         return pointA
     return pointB
 
-def getContainedPoint(cordsList: list, point: tuple) -> tuple:
+def getContainedPointIdx(cordsList: list, point: tuple) -> tuple:
     # cordsList가 가지고 있는 선분들 중에서 point 좌표를 포함하는 좌표를 찾는다
     # 좌표의 인덱스 값을 튜플로 리턴한다
     for cords in cordsList:
@@ -87,26 +87,26 @@ def severCords(cordsList: list, blankCords: list) -> list:
     # blankCords는 [(0),(1),(2),(3),(0)]
     
     # blankCords[0] 이 속하는 선분을 찾아
-    LBidx = getContainedPoint(cordsList, blankCords[0])
-    RTidx = getContainedPoint(cordsList, blankCords[2])
+    LBidx = getContainedPointIdx(cordsList, blankCords[0])
+    RTidx = getContainedPointIdx(cordsList, blankCords[2])
 
     lineLB = [cordsList[LBidx[0]][LBidx[1]], cordsList[LBidx[0]][LBidx[1]+1]]
     lineRT = [cordsList[RTidx[0]][RTidx[1]], cordsList[RTidx[0]][RTidx[1]+1]]
 
     if isPointOnLine(lineLB[0],lineLB[1], blankCords[1]):
         # 0->3 , 2->1 케이스
-        if getClosePoint(lineLB[0], blankCords[0], blankCords[1]) == blankCords[1]:
+        if getClosePointIdx(lineLB[0], blankCords[0], blankCords[1]) == blankCords[1]:
             swap(lineLB)
-        if getClosePoint(lineRT[0], blankCords[2], blankCords[3]) == blankCords[3]:
+        if getClosePointIdx(lineRT[0], blankCords[2], blankCords[3]) == blankCords[3]:
             swap(lineRT)
             
         LBto = blankCords[3]
         RTto = blankCords[1]
     else:
         # 0->1, 2->3 케이스
-        if getClosePoint(lineLB[0], blankCords[0], blankCords[3]) == blankCords[3]:
+        if getClosePointIdx(lineLB[0], blankCords[0], blankCords[3]) == blankCords[3]:
             swap(lineLB)
-        if getClosePoint(lineRT[0], blankCords[2], blankCords[1]) == blankCords[1]:
+        if getClosePointIdx(lineRT[0], blankCords[2], blankCords[1]) == blankCords[1]:
             swap(lineRT)
         
             
@@ -159,3 +159,14 @@ def severCords(cordsList: list, blankCords: list) -> list:
     return resultList
 
 
+def connectCords(firstCords: list, secondCords: list) -> list:
+    """
+    if two cords are connected, return new list
+    else return None
+
+    """
+    # 일단 접점이 있는지 없는지 검사하고
+    # 없으면 return None
+    # 있으면 -> 합치고 
+    # 합치고 접점이 없을때까지 무한반복
+    # 없으면 결과 리턴

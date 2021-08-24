@@ -1,7 +1,7 @@
-from ArctObject import ArctObject
+from ArctObject import arctObject
 from Handler import cordsHandler as cordsH
 
-class Wall(ArctObject.ArctObject):
+class Wall(arctObject.ArctObject):
     # 이 클래스는  csl(cordslist)이 총 3가지가 있다
     # csl, blankcsl, centercsl이 있다
     # csl은 벽을 구성할 하위 벽들의 집합
@@ -17,19 +17,8 @@ class Wall(ArctObject.ArctObject):
     def getCordsList(self) -> list:
         #1. 먼저 합칠 것 합치고
 
-        for eumCords in enumerate(self.cordsList):
-            for i in range(0, len(eumCords)-1):
-                base1 = eumCords[1][i]
-                base2 = eumCords[1][i+1]
-            
-                for targetIdx in range(eumCords[0]+1, len(self.cordsList)):
-                    targetCords = self.cordsList[targetIdx]
-                    for j in range(0, len(targetCords)-1):
-                        target1 = targetCords[j]
-                        target2 = targetCords[j+1]
-                        if cordsH.isPointOnLine(base1, base2, target1):
-                            # 여기서 해결봐야함
-                            pass
+        
+                            
              
 
 

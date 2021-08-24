@@ -1,2 +1,3 @@
-from ArctObject import ArctObject
-from ArctObject import Door
+from ArctObject import arctObject
+from ArctObject import door
+from ArctObject import wall
