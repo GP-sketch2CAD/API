@@ -1,5 +1,6 @@
 from typing import Dict
 import ezdxf
+from object import *
 
 
 # color information 
@@ -38,17 +39,17 @@ class DxfHandler:
         self.doc.layers.new(name= self.LAYER_WINDOW, dxfattribs={'color': 4})
     
     
-    def saveDxf(self, filename: str) -> None:
-        self.doc.saveas(filename= filename)
+    def saveDxf(self, address: str, filename : str) -> None:
+        self.doc.saveas(filename= address + '\\'+ filename)
 
 
-    def drawLine(self, cords: list, layer: str) -> None:
-        for i in range(0, len(cords)-1):
-            self.msp.add_line(cords[i], cords[i+1], dxfattribs={'layer':layer})
+    def drawLine(self, line: Line, layer: str) -> None:
+        self.msp.add_line(line.start, line.end, dxfattribs={'layer':layer})
             
-    def drawLineCSL(self, cordsList: list, layer: str) -> None:
-        for cords in cordsList:
-            self.drawLine(cords, layer)
+    def drawWall(self, wall: Wall) -> None:
+        for line in wall.lines:
+            self.drawLine(line, self.LAYER_WALL)
+        
    
      
     #  ---------------------------------------- end dxfHandler ----------------------------------------

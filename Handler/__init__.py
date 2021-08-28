@@ -1,2 +1,2 @@
-from Handler import cadHandler
-from Handler import cordsHandler
+from handler.cad import DxfHandler
+from handler import cordsHandler

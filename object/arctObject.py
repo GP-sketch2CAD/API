@@ -14,7 +14,7 @@ class ArctObject:
     객체를 돌리거나 옮기고 싶으면 좌표들을 수정하는 것이 아닌
     위치와 각도를 수정하면 됨
     """
-    def __init__(self, leftBot: tuple, rightTop: tuple, degree = 0) -> None:
+    def __init__(self, leftBot , rightTop: tuple, degree = 0) -> None:
         self.cordsList = []
         self.leftBot = leftBot
         self.rightTop = rightTop
@@ -54,3 +54,5 @@ class ArctObject:
         for cords in rotated:
             result.append(cordsH.moveCords(cords, x = m[0],y = m[1]))
         return result
+
+
