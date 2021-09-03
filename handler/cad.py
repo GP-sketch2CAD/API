@@ -24,19 +24,22 @@ class DxfHandler:
     LAYER_COLUMN = 'col'
     LAYER_WALL = 'wal'
     LAYER_WINDOW = 'wid'
+    LAYER_DOOR = 'door'
 
     def __init__(self) -> None:
         # document를 생성
-        self.doc = ezdxf.new(dxfversion='R2010')        
+        self.doc = ezdxf.new(dxfversion='R2007', setup=True)        
 
         self.msp = self.doc.modelspace()
 
         # 필요한 layer를 생성
         # 중심선, 기둥선, 벽선, 창문선 순 
+        # linetype document: https://ezdxf.readthedocs.io/en/stable/concepts/linetypes.html
         self.doc.layers.new(name= self.LAYER_CENTER, dxfattribs={'color': 1})
         self.doc.layers.new(name= self.LAYER_COLUMN, dxfattribs={'color': 2})
-        self.doc.layers.new(name= self.LAYER_WALL, dxfattribs={'color': 3})
+        self.doc.layers.new(name= self.LAYER_WALL, dxfattribs={'linetype': 'DASHED','color': 3})
         self.doc.layers.new(name= self.LAYER_WINDOW, dxfattribs={'color': 4})
+        self.doc.layers.new(name= self.LAYER_DOOR, dxfattribs={'color': 4})
     
     
     def saveDxf(self, address: str, filename : str) -> None:
@@ -44,13 +47,21 @@ class DxfHandler:
 
 
     def drawLine(self, line: Line, layer: str) -> None:
-        self.msp.add_line(line.start, line.end, dxfattribs={'layer':layer})
+        self.msp.add_line(line.start.toTuple(), line.end.toTuple(), dxfattribs={'layer':layer})
+    
+    def drawArc(self, arc: Arc, layer: str) -> None:
+        self.msp.add_arc(arc.center.toTuple(), arc.radius, arc.startAngle, arc.endAngle, arc.isCCW, dxfattribs={'layer':layer})
+    
+    def drawCircle(self, circle: Circle, layer: str) -> None:
+        self.msp.add_circle(circle.center.toTuple(), circle.radius, dxfattribs={'layer':layer})
             
     def drawWall(self, wall: Wall) -> None:
         for line in wall.lines:
             self.drawLine(line, self.LAYER_WALL)
         
-   
+    def drawDoor(self, door: Door) -> None:
+       for line in door.lines:
+           self.drawLine(line, self.LAYER_DOOR)
      
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 

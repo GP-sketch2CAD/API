@@ -1,41 +1,58 @@
-from object.base.blank import Blank
+from object.base.blank import BlankFunction
+from object.base.cord import Cord
+import copy
 
-class Door():
-    # TODO: 문 이동 경로도 생각해야하는데.... 어떻게 해야할지 고민을 더 해야함
-    # attribute: 문에 사용되는 속성들
-    # 카테고리는 값 수정 못하게 튜플로 하자
-    NORMAL = 0
-    TWODOOR = 1
-    SLIDE = 2
-    doorType = (NORMAL, TWODOOR, SLIDE)
+class Door:
+    # TODO: 문 이동 경로 나중에 추가하기
+    # TODO: 양문형, 슬라이드 나중에 추가하기
+
+    NORMAL_LEFT = 0
+    NORMAL_RIGHT = 1
+    TWODOOR = 2
+    SLIDE = 3
     
-    def __init__(self, blank: Blank, type = 0, direct = 0 ,frame = 50, doorT = 50) -> None:
-        
-        #super(Door, self).__init__(leftBot, rightTop, degree)
-        
-        # set attributes
-       
-        self.frame = frame
-        self.doorT = doorT
+    def __init__(self, cord: Cord, degree: float, doorType, attr: dict) -> None:
 
-        # normal_cw
-        # if typeIdx == 0:
-        #     # frame
-        #     self.cordsList.append(cordsH.rectangle2cords((0,0), (frame, length)))
-        #     self.cordsList.append(cordsH.rectangle2cords((width-frame, 0), (width, length)))
-        #     # door
-        #     temp = cordsH.rectangle2cords((0,0),(thickness,width-2*frame))
-        #     temp = cordsH.moveCords(temp, frame, length)
-        #     self.cordsList.append(temp)
-        # # normal_ccw
-        # elif typeIdx == 1:
-        #     # frame
-        #     self.cordsList.append(cordsH.rectangle2cords((0,0), (frame, length)))
-        #     self.cordsList.append(cordsH.rectangle2cords((width-frame,0), (width,length)))
-        #     # door
-        #     temp = cordsH.rectangle2cords((0,0),(thickness,width-2*frame))
-        #     temp = cordsH.moveCords(temp, width-frame-thickness, length)
-        #     self.cordsList.append(temp)
-        # # TODO: slide, twodoor 생각해서 추가해야함
-        # else:  
-        # pass
+        if doorType == self.NORMAL_LEFT:
+            lines = self.D_normalLeft(garo= attr.get('garo'), sero= attr.get('sero'), 
+                                            doke = attr.get('doke'), frame= attr.get('frame'))
+        elif doorType == self.NORMAL_RIGHT:
+            lines = self.D_normalRight(garo= attr.get('garo'), sero= attr.get('sero'), 
+                                            doke = attr.get('doke'), frame= attr.get('frame'))
+
+        self.lines = []
+        for line in lines:
+            ll = copy.deepcopy(line)
+            ll.rotate(degree, 0, 0)
+            ll.move(cord.x, cord.y)
+            self.lines.append(ll)
+    
+    @staticmethod
+    def D_normalLeft(garo: float, sero: float, doke: float, frame: float) -> list:
+        lines = []
+        doorL = garo - 2*frame
+        lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
+        lines += BlankFunction.nemo(Cord(frame, sero), Cord(frame + doke, sero + doorL)).toLines()
+        lines += BlankFunction.nemo(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
+
+        return lines
+
+    @staticmethod
+    def D_normalRight(garo: float, sero: float, doke: float, frame: float) -> list:
+        lines = []
+        doorL = garo - 2*frame
+        lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
+        lines += BlankFunction.nemo(Cord(garo-frame-doke, sero), Cord(garo - frame, sero + doorL)).toLines()
+        lines += BlankFunction.nemo(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
+
+        return lines
+
+    @staticmethod
+    def D_twodoor() -> list:
+        pass
+
+    @staticmethod
+    def D_slide() -> list:
+        pass
+       
+

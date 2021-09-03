@@ -1,7 +1,8 @@
 from object.base.cord import Cord
 from object.base.line import Line, LineFunction
-from object.base.blank import Blank
+from object.base.blank import Blank, BlankFunction
 from object.base.arc import Arc
+import copy
 
 class Wall:
     def __init__(self, lines: list) -> None:
@@ -29,41 +30,58 @@ class WallFunction:
         return Wall(lines=lines)
     
     def nemoRoom(leftBot: Cord, rightTop: Cord, thickness: float) -> Wall:
-        leftTop = Cord(leftBot.x, rightTop.y)
-        rightBot = Cord(rightTop.x, leftBot.y)
-        
-        inner = [leftBot, rightBot, rightTop, leftTop, leftBot]
-        lines = []
-        for i in range(0,4):
-            lines.append(Line(inner[i], inner[i+1]))
-        
-        t = thickness
-        outer = [leftBot.move(-t,-t), rightBot.move(t,-t), rightTop.move(t,t), leftTop.move(-t,t), leftBot.move(-t,-t)]
-        for i in range(0,4):
-            lines.append(Line(outer[i], outer[i+1]))
+        b1 = BlankFunction.nemo(leftBot, rightTop)
+
+        outLB = Cord(leftBot.x - thickness, leftBot.y - thickness)
+        outRT = Cord(rightTop.x + thickness, rightTop.y + thickness)
+        b2 = BlankFunction.nemo(outLB, outRT)
+
+        lines = b1.toLines() + b2.toLines()
         
         return Wall(lines=lines)
 
     def combineWall(w1: Wall, w2: Wall):
+        popone = []
+        poptwo = []
         for one in w1.lines:
             for two in w2.lines:
-                if LineFunction.isMeet(one, two):
-                    one - two
-                    two - one
+                if LineFunction.isOnePointMeet(one, two):
+                    one + two
+                    w2.lines.remove(two)
+                elif LineFunction.isMeet(one, two):
+                    beforeOne = copy.deepcopy(one)
+                    if (one - two) == True:
+                        popone.append(one)
+                    if (two - beforeOne) == True:
+                        poptwo.append(two)
+                    
+        
+        for p in popone:
+            w1.lines.remove(p)
+        for p in poptwo:
+            w2.lines.remove(p)
     
     def makeBlank(wall: Wall, blank: Blank):
         for bl in blank.toLines():
+            isChange = False
+            poplist = []
             for wl in wall.lines:
                 if LineFunction.isPcontainQ(wl,bl):
-                    if wl.start == bl.start and wl.end != bl.end: 
-                        wl - bl
-                    else: 
-                        wl.end = bl.start
+                    isChange = True
+                    if wl.start == bl.start or wl.end == bl.end: 
+                        if wl - bl == True:
+                            poplist.append(wl)
+                    else:
                         wall.lines.append(Line(bl.end, wl.end))
+                        wl.end = bl.start
+                        
                 elif LineFunction.isMeet(bl, wl):
+                    isChange = True
                     wl - bl
-                else:
-                    wall.lines.append(bl)
+            for pl in poplist:
+                wall.lines.remove(pl)
+            if isChange == False:
+                wall.lines.append(bl)
 
         
 

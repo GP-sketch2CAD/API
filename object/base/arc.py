@@ -1,12 +1,16 @@
 from object.base.cord import Cord
 
 class Arc:
-    def __init__(self, center: Cord, radius: float, startTheta, endTheta) -> None:
-        # 이건 나중에 다시 개발
-        pass
+    def __init__(self, center: Cord, radius: float, startAngle: float, endAngle: float, isCCW: bool = True) -> None:
+        self.center = center
+        self.radius = radius
+        self.startAngle = startAngle
+        self.endAngle = endAngle
+        self.isCCW = isCCW
+       
 
 class Circle:
-     def __init__(self, center: Cord, r: float) -> None:
-        self.center = Cord
-        self.r = r
-        pass
+     def __init__(self, center: Cord, radius: float) -> None:
+        self.center = center
+        self.radius = radius
+        

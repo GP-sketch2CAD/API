@@ -1,3 +1,5 @@
+import math
+
 class Cord:
     def __init__(self, x: float, y: float) -> None:
         self.x = x
@@ -16,4 +18,26 @@ class Cord:
         """
         self.x += x
         self.y += y
-        pass
+
+    def rotate(self, degree: float, x = 0., y = 0.) -> None:
+        """
+        cw rotate as degree
+
+        reference
+        ----------
+        https://java.elex.pe.kr/2016/05/transform-rotation.html
+        """
+        sinD = math.sin(math.radians(degree))
+        cosD = math.cos(math.radians(degree))
+        bx = self.x
+        by = self.y
+        
+        ax = (bx-x)*cosD + (by-y)*sinD
+        ay = (by-y)*cosD - (bx-x)*sinD  
+
+        self.x = round(ax,2)
+        self.y = round(ay,2)
+        
+
+    def toTuple(self) -> tuple:
+        return (self.x, self.y)

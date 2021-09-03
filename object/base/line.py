@@ -40,8 +40,7 @@ class Line:
         if self.__class__ != o.__class__: return None
         if LineFunction.isMeet(self, o) == False: return None
         if LineFunction.isPcontainQ(p = o, q = self):
-            self.delete()
-            return None
+            return True
         
         if o.start.x <= self.start.x and  self.start.x < o.end.x: self.start = o.end
         elif self.straight.b == 0 and o.start.y <= self.start.y and self.start.y < o.end.y: self.start = o.end
@@ -56,21 +55,29 @@ class Line:
         self.end = None
         self.start = None
     
-    def moveXY(self, x = 0., y = 0.) -> None:
+    def move(self, x = 0., y = 0.) -> None:
         """
         move the line by the given x,y 
         """
         self.straight.move(x,y)
         self.start.move(x,y)
         self.end.move(x,y)
-        pass
+        
 
     def movePal(self, distance: float) -> None:
         if self.straight.b == 0:
             self.c += distance
         else: 
             self.c = distance * (self.straight.a**2 +1)**0.5
-        pass
+        
+
+    def rotate(self, degree: float, x = 0., y= 0.) -> None:
+        """
+        clockwise rotate as degree 
+        """
+        self.start.rotate(degree, x, y)
+        self.end.rotate(degree, x, y)
+        self.straight.recal(self.start, self.end)
 
         
 class Straight:
@@ -108,6 +115,16 @@ class Straight:
         move the straight the given cord
         """
         self.c = - (self.a*cord.x + self.b*cord.y)
+
+    def recal(self, start: Cord, end: Cord) -> None:
+        if start.x == end.x:
+            self.a = -1
+            self.b = 0
+            self.c = start.x
+        else:
+            self.a = (end.y - start.y) / (end.x - start.x)
+            self.b = -1
+            self.c = start.y - self.a*start.x
               
 
 class LineFunction:
@@ -147,6 +164,12 @@ class LineFunction:
             if (LineFunction.isLcontainC(p, q.start) or LineFunction.isLcontainC(p, q.end) or 
                     LineFunction.isLcontainC(q, p.start) or LineFunction.isLcontainC(q, p.end)):
                 return True
+        else: return False
+
+    @staticmethod
+    def isOnePointMeet(p: Line, q: Line) -> bool:
+        if p.straight == q.straight:
+            if p.start == q.end or p.end == q.start: return True
         else: return False
 
     
