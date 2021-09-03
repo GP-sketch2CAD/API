@@ -62,6 +62,17 @@ class DxfHandler:
     def drawDoor(self, door: Door) -> None:
        for line in door.lines:
            self.drawLine(line, self.LAYER_DOOR)
+
+    def drawColumn(self, column: Column) -> None:
+        if column.isCircle:
+            self.drawCircle(column.circle, self.LAYER_COLUMN)
+        else:
+            for line in column.lines:
+                self.drawLine(line, self.LAYER_COLUMN)
+    
+    def drawWindow(self, window: Window) -> None:
+        for line in window.blank.toLines():
+            self.drawLine(line, self.LAYER_WINDOW)
      
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 
