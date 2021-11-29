@@ -21,6 +21,14 @@ class Blank:
         lines.append(Line(self.cords[len(self.cords)-1], self.cords[0]))
         return lines
 
+    def rotate(self, degree: float):
+        for c in self.cords:
+            c.rotate(degree)
+    
+    def move(self, dx, dy):
+        for c in self.cords:
+            c.move(dx, dy)
+
 
 class BlankFunction:
     def nemo(leftBot: Cord, rightTop: Cord) -> Blank:

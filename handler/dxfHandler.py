@@ -1,6 +1,8 @@
 from typing import Dict
 import ezdxf
+from handler.jsonInterpreter import JsonInterpreter
 from object import *
+from object.architecture.column import SquareColumn
 
 
 # color information 
@@ -43,7 +45,7 @@ class DxfHandler:
     
     
     def saveDxf(self, address: str, filename : str) -> None:
-        self.doc.saveas(filename= address + '\\'+ filename)
+        self.doc.saveas(filename= address + '\\' +filename)
 
 
     def drawLine(self, line: Line, layer: str) -> None:
@@ -55,6 +57,7 @@ class DxfHandler:
     def drawCircle(self, circle: Circle, layer: str) -> None:
         self.msp.add_circle(circle.center.toTuple(), circle.radius, dxfattribs={'layer':layer})
             
+
     def drawWall(self, wall: Wall) -> None:
         for line in wall.lines:
             self.drawLine(line, self.LAYER_WALL)
@@ -63,16 +66,28 @@ class DxfHandler:
        for line in door.lines:
            self.drawLine(line, self.LAYER_DOOR)
 
-    def drawColumn(self, column: Column) -> None:
-        if column.isCircle:
-            self.drawCircle(column.circle, self.LAYER_COLUMN)
-        else:
-            for line in column.lines:
-                self.drawLine(line, self.LAYER_COLUMN)
+    def drawSquareColumn(self, column: SquareColumn) -> None:
+        # if column.isCircle:
+        #     self.drawCircle(column.circle, self.LAYER_COLUMN)
+        for line in column.lines:
+            self.drawLine(line, self.LAYER_COLUMN)
     
     def drawWindow(self, window: Window) -> None:
-        for line in window.blank.toLines():
+        for line in window.lines:
             self.drawLine(line, self.LAYER_WINDOW)
+
+    def drawJsonInter(self, jsonInter: JsonInterpreter):
+        self.drawWall(jsonInter.wall)
+
+        for d in jsonInter.doors:
+            self.drawDoor(d)
+
+        for w in jsonInter.windows:
+            self.drawWindow(w)
+
+        for c in jsonInter.columns:
+            self.drawSquareColumn(c)
+        
      
     #  ---------------------------------------- end dxfHandler ----------------------------------------
 

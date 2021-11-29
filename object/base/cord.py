@@ -4,7 +4,6 @@ class Cord:
     def __init__(self, x: float, y: float) -> None:
         self.x = x
         self.y = y
-        pass
 
     def __str__(self) -> str:
         return '({},{})'.format(self.x, self.y)
@@ -41,3 +40,8 @@ class Cord:
 
     def toTuple(self) -> tuple:
         return (self.x, self.y)
+
+class CordFunction:
+    @staticmethod
+    def list2cord(xy: list or tuple)-> Cord:
+        return Cord(xy[0], xy[1])

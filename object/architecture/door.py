@@ -1,5 +1,5 @@
-from object.base.blank import BlankFunction
-from object.base.cord import Cord
+from object.base.blank import Blank, BlankFunction
+from object.base.cord import Cord, CordFunction
 import copy
 
 class Door:
@@ -12,23 +12,38 @@ class Door:
     SLIDE = 3
     
     def __init__(self, cord: Cord, degree: float, doorType, attr: dict) -> None:
+        
+        self.outerCords = []
+        
 
         if doorType == self.NORMAL_LEFT:
-            lines = self.D_normalLeft(garo= attr.get('garo'), sero= attr.get('sero'), 
+            temp_lines = self.D_normalLeft(garo= attr.get('garo'), sero= attr.get('sero'), 
                                             doke = attr.get('doke'), frame= attr.get('frame'))
         elif doorType == self.NORMAL_RIGHT:
-            lines = self.D_normalRight(garo= attr.get('garo'), sero= attr.get('sero'), 
+            temp_lines = self.D_normalRight(garo= attr.get('garo'), sero= attr.get('sero'), 
                                             doke = attr.get('doke'), frame= attr.get('frame'))
 
+
+
+        for c in self.outerCords:
+            c.rotate(degree)
+        dx, dy = self.getOuterLBCord()
+
         self.lines = []
-        for line in lines:
+        for line in temp_lines:
             ll = copy.deepcopy(line)
             ll.rotate(degree, 0, 0)
-            ll.move(cord.x, cord.y)
+            ll.move(cord.x - dx, cord.y - dy)
             self.lines.append(ll)
-    
-    @staticmethod
-    def D_normalLeft(garo: float, sero: float, doke: float, frame: float) -> list:
+
+        self.blank.rotate(degree)
+        self.blank.move(cord.x - dx, cord.y - dy)
+   
+    def D_normalLeft(self, garo: float, sero: float, doke: float, frame: float) -> list:
+        self.setOuterCords([[0,0], [0,sero], [garo,0], [garo,sero]])
+        self.blank = BlankFunction.nemo(Cord(0,0), Cord(garo, sero))
+
+
         lines = []
         doorL = garo - 2*frame
         lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
@@ -37,8 +52,11 @@ class Door:
 
         return lines
 
-    @staticmethod
-    def D_normalRight(garo: float, sero: float, doke: float, frame: float) -> list:
+    
+    def D_normalRight(self, garo: float, sero: float, doke: float, frame: float) -> list:
+        self.setOuterCords([[0,0], [0,sero], [garo,0], [garo,sero]])
+        self.blank = BlankFunction.nemo(Cord(0,0), Cord(garo, sero))
+
         lines = []
         doorL = garo - 2*frame
         lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
@@ -55,4 +73,21 @@ class Door:
     def D_slide() -> list:
         pass
        
+    
+    def setOuterCords(self, cords: list):
+        for c in cords:
+            self.outerCords.append(CordFunction.list2cord(c))
 
+    def getOuterLBCord(self):
+        min_y = None
+        min_x = None
+
+        for c in self.outerCords:
+            if min_y == None or min_y > c.y:
+                min_x = c.x
+                min_y = c.y
+            elif min_y == c.y and min_x > c.x:
+                min_x = c.x
+                min_y = c.y
+        
+        return min_x, min_y

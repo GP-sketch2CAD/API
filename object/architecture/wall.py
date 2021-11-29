@@ -9,14 +9,23 @@ class Wall:
         """
         param
         -------
-        cords: 벽 내부의 꼭지점들 
+
         """
         self.lines = lines
-        pass
-
+        
+    
+    
     def addCurveWall(self, arcs: list) -> None:
         self.arcs = arcs
-        pass
+        
+
+    def __add__(self, other):
+        if isinstance(other, Wall):
+            WallFunction.combineWall(self, other)
+            return self.lines + other.lines
+
+    def __str__(self) -> str:
+        return str(self.lines)
 
 class WallFunction:
     def blank2Wall(blank: Blank) -> Wall:
@@ -45,22 +54,24 @@ class WallFunction:
         poptwo = []
         for one in w1.lines:
             for two in w2.lines:
+                # 한 점에서 만나는 경우
                 if LineFunction.isOnePointMeet(one, two):
                     one + two
                     w2.lines.remove(two)
+                # 선이 겹치는 경우
                 elif LineFunction.isMeet(one, two):
-                    beforeOne = copy.deepcopy(one)
-                    if (one - two) == True:
-                        popone.append(one)
-                    if (two - beforeOne) == True:
-                        poptwo.append(two)
-                    
-        
-        for p in popone:
-            w1.lines.remove(p)
-        for p in poptwo:
-            w2.lines.remove(p)
+                    if LineFunction.isPcontainQ(one, two):
+                        w2.lines.remove(two)
+                    elif LineFunction.isPcontainQ(two, one):
+                        w1.lines.remove(one)
+                    else:
+                        one - two
+                        one + two
+                        w2.lines.remove(two)
+                # 선이 크로스되는 경우
     
+
+    # 라인 빼고 더하는 부분 수정해야함
     def makeBlank(wall: Wall, blank: Blank):
         for bl in blank.toLines():
             isChange = False

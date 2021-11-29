@@ -3,6 +3,7 @@ from object.base.blank import BlankFunction
 from object.architecture.wall import WallFunction
 from object import *
 from handler import *
+import os
 #--------------------------------------------------
 
 def Test_combine1() -> None:
@@ -75,7 +76,6 @@ def Test_door() -> None:
 
     cad.saveDxf('Output', 'sample4.dxf')
 
-
 def Test_Circle() -> None:
     c = Circle(Cord(10,10), 10.)
     l = Line(Cord(0,0), Cord(10,10))
@@ -92,6 +92,22 @@ def Test_Arc() -> None:
     cad = DxfHandler()
     cad.drawArc(arc, DxfHandler.LAYER_WINDOW)
     cad.saveDxf('Output', 'sample4.dxf')
+
+def Test_readJson():
+    jsonInter = JsonInterpreter()
+    jsonInter.loadJson('test_house.json')
+    print(jsonInter.json)
+
+def Test_readDraw(fileName):
+    jsonInter = JsonInterpreter()
+    jsonInter.loadJson(fileName)
+    jsonInter.convert2Obj()
+
+    cadH = DxfHandler()
+    cadH.drawJsonInter(jsonInter)
+    cadH.saveDxf('Output', fileName + '.dxf')
 #--------------------------------------------
 
-Test_Arc()
+if __name__ =='__main__':
+    Test_readDraw('test_house.json')
+    # Test_readDraw('test_house2.json')

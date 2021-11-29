@@ -1,5 +1,5 @@
 import math
-
+#지금 안씀
 def rectangle2cords(leftBot: tuple, rightTop: tuple) -> list:
     leftTop = (leftBot[0], rightTop[1])
     rightBot = (rightTop[0], leftBot[1])

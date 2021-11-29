@@ -1,3 +1,4 @@
+from object.base.arc import Circle
 from object.base.cord import Cord
 import math
 
@@ -35,12 +36,10 @@ class Line:
 
         return self
         
-
     def __sub__(self, o: object) -> object:
         if self.__class__ != o.__class__: return None
         if LineFunction.isMeet(self, o) == False: return None
-        if LineFunction.isPcontainQ(p = o, q = self):
-            return True
+        if LineFunction.isPcontainQ(p = o, q = self): return None
         
         if o.start.x <= self.start.x and  self.start.x < o.end.x: self.start = o.end
         elif self.straight.b == 0 and o.start.y <= self.start.y and self.start.y < o.end.y: self.start = o.end
@@ -61,8 +60,7 @@ class Line:
         """
         self.straight.move(x,y)
         self.start.move(x,y)
-        self.end.move(x,y)
-        
+        self.end.move(x,y)        
 
     def movePal(self, distance: float) -> None:
         if self.straight.b == 0:
@@ -75,10 +73,21 @@ class Line:
         """
         clockwise rotate as degree 
         """
+        swap = False
         self.start.rotate(degree, x, y)
         self.end.rotate(degree, x, y)
-        self.straight.recal(self.start, self.end)
 
+        self.straight.recal(self.start, self.end)
+        
+        if self.start.x == self.end.x:
+            if self.start.y > self.end.y: swap = True
+        elif self.start.x > self.end.x : swap = True
+
+        if swap:
+            temp = self.start
+            self.start = self.end
+            self.end = temp
+       
         
 class Straight:
     """
@@ -125,6 +134,8 @@ class Straight:
             self.a = (end.y - start.y) / (end.x - start.x)
             self.b = -1
             self.c = start.y - self.a*start.x
+
+    
               
 
 class LineFunction:
@@ -172,7 +183,6 @@ class LineFunction:
             if p.start == q.end or p.end == q.start: return True
         else: return False
 
-    
     @staticmethod
     def getBetweenAngle(p: Line, q: Line) -> float:
         """
@@ -193,6 +203,17 @@ class LineFunction:
         son = a[0]*b[1] - a[1]*b[0]
         mom = (a[0]**2 + a[1]**2)**0.5 * (b[0]**2 + b[1]**2)**0.5
 
-        return math.asin(son/mom)  
+        return math.asin(son/mom)
 
+    @staticmethod
+    def getSugikStraight(s: Straight) -> Straight:
+        if s.a == 0:
+            return Straight(Cord(0,0), Cord(0,1))
+        elif s.b == 0:
+            return Straight(Cord(0,0), Cord(1,0))
+        else:
+            return Straight(Cord(0,0), Cord(1,s.b/s.a))
     
+    @staticmethod
+    def getCords_StraightCircle(s: Straight, c: Circle) -> tuple:
+        pass
