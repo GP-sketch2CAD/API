@@ -3,9 +3,12 @@ from object.base.blank import BlankFunction
 from object.architecture.wall import WallFunction
 from object import *
 from handler import *
-import os
+import socket
+from os.path import exists
+import sys
+import json
 #--------------------------------------------------
-
+'''
 def Test_combine1() -> None:
     b = BlankFunction.nemo(Cord(0,0), Cord(100, 300))
     b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
@@ -97,6 +100,7 @@ def Test_readJson():
     jsonInter = JsonInterpreter()
     jsonInter.loadJson('test_house.json')
     print(jsonInter.json)
+'''
 
 def Test_readDraw(fileName):
     jsonInter = JsonInterpreter()
@@ -106,8 +110,55 @@ def Test_readDraw(fileName):
     cadH = DxfHandler()
     cadH.drawJsonInter(jsonInter)
     cadH.saveDxf('Output', fileName + '.dxf')
+
 #--------------------------------------------
 
 if __name__ =='__main__':
-    Test_readDraw('test_house.json')
-    # Test_readDraw('test_house2.json')
+    # 서버 주소랑 포트번호
+    host = '192.168.219.109'
+    port = 8080
+
+    #소켓 통신
+    server_sock = socket.socket(socket.AF_INET)
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    server_sock.bind((host, port))
+    server_sock.listen(1)
+
+    while True:
+        print("기다리는 중")
+        client_sock, addr = server_sock.accept()
+        if client_sock:
+            print("Connected by", addr)
+            # 여기 부분에서 안드로이드->파이썬 json data를 가져와야함.
+            '''
+            data = bytearray(client_sock.recv(1024))[2:]
+            info = json.loads(data)
+            print("room count:", len(info))
+            print(info['room']['X,Y'])
+            print(info['body'])
+            '''
+
+            filename = "test_house.json"
+            Test_readDraw(filename)
+
+            data_transferred = 0
+
+            if not exists('Output'+'\\'+filename + '.dxf'):
+                print("no file")
+                sys.exit()
+
+            print("파일 %s 전송 시작" % 'Output'+'\\'+filename + '.dxf')
+
+            with open('Output'+'\\'+filename + '.dxf', 'rb') as f:
+                try:
+                    data = f.read(1024)  # 1024바이트 읽는다
+                    while data:  # 데이터가 없을 때까지
+                        data_transferred += client_sock.send(data)  # 1024바이트 보내고 크기 저장
+                        data = f.read(1024)  # 1024바이트 읽음
+                        print("전송완료 %s, 전송량 %d" % (filename + '.dxf', data_transferred))
+                except Exception as ex:
+                    print(ex)
+
+    client_sock.close()
+    server_sock.close()
