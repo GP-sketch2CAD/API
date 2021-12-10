@@ -8,7 +8,7 @@ from os.path import exists
 import sys
 import json
 #--------------------------------------------------
-'''
+
 def Test_combine1() -> None:
     b = BlankFunction.nemo(Cord(0,0), Cord(100, 300))
     b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
@@ -100,7 +100,6 @@ def Test_readJson():
     jsonInter = JsonInterpreter()
     jsonInter.loadJson('test_house.json')
     print(jsonInter.json)
-'''
 
 def Test_readDraw(fileName):
     jsonInter = JsonInterpreter()
@@ -111,11 +110,9 @@ def Test_readDraw(fileName):
     cadH.drawJsonInter(jsonInter)
     cadH.saveDxf('Output', fileName + '.dxf')
 
-#--------------------------------------------
-
-if __name__ =='__main__':
+def Test_Communicate():
     # 서버 주소랑 포트번호
-    host = '192.168.219.109'
+    host = '172.30.1.40' 
     port = 8080
 
     #소켓 통신
@@ -131,15 +128,18 @@ if __name__ =='__main__':
         if client_sock:
             print("Connected by", addr)
             # 여기 부분에서 안드로이드->파이썬 json data를 가져와야함.
-            '''
+            
             data = bytearray(client_sock.recv(1024))[2:]
             info = json.loads(data)
-            print("room count:", len(info))
-            print(info['room']['X,Y'])
-            print(info['body'])
-            '''
+            
 
-            filename = "test_house.json"
+
+
+
+            
+            
+
+            filename = "commuicate.json"
             Test_readDraw(filename)
 
             data_transferred = 0
@@ -157,8 +157,17 @@ if __name__ =='__main__':
                         data_transferred += client_sock.send(data)  # 1024바이트 보내고 크기 저장
                         data = f.read(1024)  # 1024바이트 읽음
                         print("전송완료 %s, 전송량 %d" % (filename + '.dxf', data_transferred))
+                        
                 except Exception as ex:
                     print(ex)
+                finally:
+                    break
 
     client_sock.close()
     server_sock.close()
+
+#--------------------------------------------
+
+if __name__ =='__main__':
+
+    pass
