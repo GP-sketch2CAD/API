@@ -53,6 +53,8 @@ class JsonInterpreter:
     def convert2Obj(self):
         self.name = self.json["name"]
         objs = self.json['arctObj']
+        objs
+
 
         for obj in objs:
             if obj['type'] == 'nemoRoom':
@@ -60,7 +62,8 @@ class JsonInterpreter:
                                         CordFunction.list2cord(obj['rightTop']), 
                                         obj['thickness'])
                 self.wall.lines = self.wall + w
-            
+
+        for obj in objs:  
             if obj['type'] == 'door':
                 door = Door(CordFunction.list2cord(obj['cord']), obj['degree'], obj['doorType'], obj['attr'])
                 WallFunction.makeBlank(self.wall, door.blank)

@@ -169,5 +169,5 @@ def Test_Communicate():
 #--------------------------------------------
 
 if __name__ =='__main__':
-
+    Test_readDraw('test_house3.json')
     pass

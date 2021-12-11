@@ -51,18 +51,17 @@
             "rightTop":[2500, 2500]
         },
         {
-            "name": "room 2",
+            "name": "living room",
             "type": "nemoRoom",
             "leftBot": [
-                -3000,
-                2500
+                4200,
+                0
             ],
             "rightTop": [
-                -200,
-                5500
+                8000,
+                3000
             ],
             "thickness": 200
-            
         }
     ]
 }

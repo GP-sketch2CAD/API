@@ -59,8 +59,10 @@ class Communicator:
 
                     except Exception as ex:
                         print(ex)
-                    finally:
                         break
+                    finally:
+                        pass
+                        
 
         client_sock.close()
         self.server_sock.close()
