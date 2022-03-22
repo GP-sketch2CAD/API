@@ -1,15 +1,21 @@
 import math
 
 class Cord:
-    def __init__(self, x: float, y: float) -> None:
-        self.x = x
-        self.y = y
+    def __init__(self, x : float = 0, y: float = 0) -> None:
+        self.setCord([x,y])
 
     def __str__(self) -> str:
-        return '({},{})'.format(self.x, self.y)
+        return 'Cord: ({},{})'.format(self.x, self.y)
 
     def __eq__(self, o: object) -> bool:
         return (self.__class__ == o.__class__) and (self.x == o.x) and (self.y == o.y)
+
+    def setCord(self, xy) -> None:
+        """
+        set cord to given xy
+        """
+        self.x = xy[0]
+        self.y = xy[1]
 
     def move(self, x = 0., y= 0.) -> None:
         """
@@ -18,9 +24,9 @@ class Cord:
         self.x += x
         self.y += y
 
-    def rotate(self, degree: float, x = 0., y = 0.) -> None:
+    def rotate(self, degree: float, dx = 0., dy = 0.) -> None:
         """
-        cw rotate as degree
+        clockwise rotate as degree
 
         reference
         ----------
@@ -31,17 +37,15 @@ class Cord:
         bx = self.x
         by = self.y
         
-        ax = (bx-x)*cosD + (by-y)*sinD
-        ay = (by-y)*cosD - (bx-x)*sinD  
+        ax = (bx-dx)*cosD + (by-dy)*sinD
+        ay = (by-dy)*cosD - (bx-dx)*sinD  
 
         self.x = round(ax,2)
         self.y = round(ay,2)
         
 
-    def toTuple(self) -> tuple:
+    def getTuple(self) -> tuple:
+        """
+        return (x,y)
+        """
         return (self.x, self.y)
-
-class CordFunction:
-    @staticmethod
-    def list2cord(xy: list or tuple)-> Cord:
-        return Cord(xy[0], xy[1])

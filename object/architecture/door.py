@@ -13,6 +13,7 @@ class Door:
     
     def __init__(self, cord: Cord, degree: float, doorType, attr: dict) -> None:
         
+        #self.
         self.outerCords = []
         
 

@@ -9,8 +9,6 @@ class Window:
 
     BASIC_TYPE = 0
 
-
-
     def __init__(self, cord: Cord, degree: float, windowType, attr: dict) -> None:
 
         self.outerCords = []

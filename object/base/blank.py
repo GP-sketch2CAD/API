@@ -1,25 +1,16 @@
-from object.base import cord
-from object.base.cord import Cord
-from object.base.line import Line
+from cord import Cord
+from line import Line
 
 class Blank:
     def __init__(self, cords: list) -> None:
         self.cords = cords
         
-
     def __str__(self) -> str:
-        result = '['
-        for cord in self.cords:
-            result = result + str(cord) + ', '
-        result +=  str(self.cords[0]) + ']'
-        return result
+        return 'Blank: [' + ', '.join(map(str, self.cords)) + ', ' + str(self.cords[0]) +']'
 
     def toLines(self) -> list:
-        lines = []
-        for i in range(0, len(self.cords)-1):
-            lines.append(Line(self.cords[i], self.cords[i+1]))
-        lines.append(Line(self.cords[len(self.cords)-1], self.cords[0]))
-        return lines
+        length = len(self.cords)
+        return [Line(self.cords[i], self.cords[(i+1)% length]) for i in range(0, length)]
 
     def rotate(self, degree: float):
         for c in self.cords:
@@ -30,8 +21,11 @@ class Blank:
             c.move(dx, dy)
 
 
-class BlankFunction:
-    def nemo(leftBot: Cord, rightTop: Cord) -> Blank:
+class NemoBlank(Blank):
+    def __init__(self, leftBot: Cord, rightTop: Cord) -> None:
         leftTop = Cord(leftBot.x, rightTop.y)
         rightBot = Cord(rightTop.x, leftBot.y)
-        return Blank([leftBot, leftTop, rightTop, rightBot])
+        super().__init__([leftBot, leftTop, rightTop, rightBot])
+
+
+

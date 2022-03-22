@@ -1,4 +1,4 @@
-from object.base.cord import Cord
+from cord import Cord
 
 class Arc:
     def __init__(self, center: Cord, radius: float, startAngle: float, endAngle: float, isCCW: bool = True) -> None:

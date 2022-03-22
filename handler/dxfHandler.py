@@ -50,13 +50,13 @@ class DxfHandler:
 
 
     def drawLine(self, line: Line, layer: str) -> None:
-        self.msp.add_line(line.start.toTuple(), line.end.toTuple(), dxfattribs={'layer':layer})
+        self.msp.add_line(line.start.getTuple(), line.end.getTuple(), dxfattribs={'layer':layer})
     
     def drawArc(self, arc: Arc, layer: str) -> None:
-        self.msp.add_arc(arc.center.toTuple(), arc.radius, arc.startAngle, arc.endAngle, arc.isCCW, dxfattribs={'layer':layer})
+        self.msp.add_arc(arc.center.getTuple(), arc.radius, arc.startAngle, arc.endAngle, arc.isCCW, dxfattribs={'layer':layer})
     
     def drawCircle(self, circle: Circle, layer: str) -> None:
-        self.msp.add_circle(circle.center.toTuple(), circle.radius, dxfattribs={'layer':layer})
+        self.msp.add_circle(circle.center.getTuple(), circle.radius, dxfattribs={'layer':layer})
             
 
     def drawWall(self, wall: Wall) -> None:
