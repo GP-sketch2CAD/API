@@ -1,5 +1,5 @@
-from object.base.blank import Blank, BlankFunction
-from object.base.cord import Cord, CordFunction
+from object.base.blank import Blank, NemoBlank
+from object.base.cord import Cord
 import copy
 
 class Door:
@@ -42,27 +42,27 @@ class Door:
    
     def D_normalLeft(self, garo: float, sero: float, doke: float, frame: float) -> list:
         self.setOuterCords([[0,0], [0,sero], [garo,0], [garo,sero]])
-        self.blank = BlankFunction.nemo(Cord(0,0), Cord(garo, sero))
+        self.blank = NemoBlank(Cord(0,0), Cord(garo, sero))
 
 
         lines = []
         doorL = garo - 2*frame
-        lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
-        lines += BlankFunction.nemo(Cord(frame, sero), Cord(frame + doke, sero + doorL)).toLines()
-        lines += BlankFunction.nemo(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
+        lines += NemoBlank(Cord(0,0), Cord(frame, sero)).toLines()
+        lines += NemoBlank(Cord(frame, sero), Cord(frame + doke, sero + doorL)).toLines()
+        lines += NemoBlank(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
 
         return lines
 
     
     def D_normalRight(self, garo: float, sero: float, doke: float, frame: float) -> list:
         self.setOuterCords([[0,0], [0,sero], [garo,0], [garo,sero]])
-        self.blank = BlankFunction.nemo(Cord(0,0), Cord(garo, sero))
+        self.blank = NemoBlank(Cord(0,0), Cord(garo, sero))
 
         lines = []
         doorL = garo - 2*frame
-        lines += BlankFunction.nemo(Cord(0,0), Cord(frame, sero)).toLines()
-        lines += BlankFunction.nemo(Cord(garo-frame-doke, sero), Cord(garo - frame, sero + doorL)).toLines()
-        lines += BlankFunction.nemo(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
+        lines += NemoBlank(Cord(0,0), Cord(frame, sero)).toLines()
+        lines += NemoBlank(Cord(garo-frame-doke, sero), Cord(garo - frame, sero + doorL)).toLines()
+        lines += NemoBlank(Cord(garo-frame, 0), Cord(garo, sero)).toLines()
 
         return lines
 
@@ -77,7 +77,7 @@ class Door:
     
     def setOuterCords(self, cords: list):
         for c in cords:
-            self.outerCords.append(CordFunction.list2cord(c))
+            self.outerCords.append(Cord(c[0], c[1]))
 
     def getOuterLBCord(self):
         min_y = None

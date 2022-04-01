@@ -1,6 +1,4 @@
 from object.base.arc import Circle
-from object.base.blank import BlankFunction
-from object.architecture.wall import WallFunction
 from object import *
 from handler import *
 import socket
@@ -9,62 +7,62 @@ import sys
 import json
 #--------------------------------------------------
 
-def Test_combine1() -> None:
-    b = BlankFunction.nemo(Cord(0,0), Cord(100, 300))
-    b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
-    b3 = BlankFunction.nemo(Cord(100,200), Cord(200, 300))
-    w = WallFunction.blank2Wall(b)
-    w2 = WallFunction.blank2Wall(b2)
-    w3 = WallFunction.blank2Wall(b3)
+# def Test_combine1() -> None:
+#     b = BlankFunction.nemo(Cord(0,0), Cord(100, 300))
+#     b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
+#     b3 = BlankFunction.nemo(Cord(100,200), Cord(200, 300))
+#     w = WallFunction.blank2Wall(b)
+#     w2 = WallFunction.blank2Wall(b2)
+#     w3 = WallFunction.blank2Wall(b3)
 
-    cad = DxfHandler()
+#     cad = DxfHandler()
 
-    WallFunction.combineWall(w, w2)
-    WallFunction.combineWall(w,w3)
-    cad.drawWall(w)
-    cad.drawWall(w2)
-    cad.drawWall(w3)
-    cad.saveDxf('Output', 'sample2.dxf')
+#     WallFunction.combineWall(w, w2)
+#     WallFunction.combineWall(w,w3)
+#     cad.drawWall(w)
+#     cad.drawWall(w2)
+#     cad.drawWall(w3)
+#     cad.saveDxf('Output', 'sample2.dxf')
 
-def Test_combine2() -> None:
-    b = BlankFunction.nemo(Cord(0,0), Cord(100, 100))
-    b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
-    w = WallFunction.blank2Wall(b)
-    w2 = WallFunction.blank2Wall(b2)
+# def Test_combine2() -> None:
+#     b = BlankFunction.nemo(Cord(0,0), Cord(100, 100))
+#     b2 = BlankFunction.nemo(Cord(100,0), Cord(200, 100))
+#     w = WallFunction.blank2Wall(b)
+#     w2 = WallFunction.blank2Wall(b2)
     
-    cad = DxfHandler()
+#     cad = DxfHandler()
 
-    WallFunction.combineWall(w, w2)
-    cad.drawWall(w)
-    cad.drawWall(w2)
-    cad.saveDxf('Output', 'sample2.dxf')
+#     WallFunction.combineWall(w, w2)
+#     cad.drawWall(w)
+#     cad.drawWall(w2)
+#     cad.saveDxf('Output', 'sample2.dxf')
 
-def Test_makeNemoRoom() -> None:
-    w = WallFunction.nemoRoom(Cord(0,0), Cord(1000, 1000), 200.)
-    cad = DxfHandler()
+# def Test_makeNemoRoom() -> None:
+#     w = WallFunction.nemoRoom(Cord(0,0), Cord(1000, 1000), 200.)
+#     cad = DxfHandler()
 
-    cad.drawWall(w)
-    cad.saveDxf('Output', 'sample3.dxf')
+#     cad.drawWall(w)
+#     cad.saveDxf('Output', 'sample3.dxf')
 
-def Test_makeBlank() -> None:
-    w = WallFunction.nemoRoom(Cord(0,0), Cord(1000, 1000), 200.)
-    cad = DxfHandler()
-    b = BlankFunction.nemo(Cord(200,-200), Cord(400,0)) 
+# def Test_makeBlank() -> None:
+#     w = WallFunction.nemoRoom(Cord(0,0), Cord(1000, 1000), 200.)
+#     cad = DxfHandler()
+#     b = BlankFunction.nemo(Cord(200,-200), Cord(400,0)) 
     
-    WallFunction.makeBlank(w, b)
-    cad.drawWall(w)
-    cad.saveDxf('Output', 'sample3.dxf')
+#     WallFunction.makeBlank(w, b)
+#     cad.drawWall(w)
+#     cad.saveDxf('Output', 'sample3.dxf')
 
-def Test_makeBlank2() -> None:
-    b = BlankFunction.nemo(Cord(0,0), Cord(100, 1000))
-    w = WallFunction.blank2Wall(b)
+# def Test_makeBlank2() -> None:
+#     b = BlankFunction.nemo(Cord(0,0), Cord(100, 1000))
+#     w = WallFunction.blank2Wall(b)
 
-    cad = DxfHandler()
-    b = BlankFunction.nemo(Cord(0, 200), Cord(100,300)) 
+#     cad = DxfHandler()
+#     b = BlankFunction.nemo(Cord(0, 200), Cord(100,300)) 
     
-    WallFunction.makeBlank(w, b)
-    cad.drawWall(w)
-    cad.saveDxf('Output', 'sample3.dxf')
+#     WallFunction.makeBlank(w, b)
+#     cad.drawWall(w)
+#     cad.saveDxf('Output', 'sample3.dxf')
 
 def Test_door() -> None:
     ar = {'garo': 1000., 'sero': 200., 'doke': 40., 'frame': 50.}

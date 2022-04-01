@@ -1,5 +1,5 @@
-from cord import Cord
-from line import Line
+from object.base.cord import Cord
+from object.base.line import Line
 
 class Blank:
     def __init__(self, cords: list) -> None:

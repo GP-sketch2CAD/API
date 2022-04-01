@@ -50,7 +50,9 @@ class DxfHandler:
 
 
     def drawLine(self, line: Line, layer: str) -> None:
-        self.msp.add_line(line.start.getTuple(), line.end.getTuple(), dxfattribs={'layer':layer})
+        # start = line.cords[0].getTuple()
+        # end = line.cords[1].getTuple()
+        self.msp.add_line(line.cords[0].getTuple(), line.cords[1].getTuple(), dxfattribs={'layer':layer})
     
     def drawArc(self, arc: Arc, layer: str) -> None:
         self.msp.add_arc(arc.center.getTuple(), arc.radius, arc.startAngle, arc.endAngle, arc.isCCW, dxfattribs={'layer':layer})

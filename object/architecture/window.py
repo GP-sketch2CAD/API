@@ -1,8 +1,8 @@
 import copy
-from object.base.blank import Blank, BlankFunction
-from object.base.cord import Cord, CordFunction
+from object.base.blank import Blank, NemoBlank
+from object.base.cord import Cord
 from object.base.line import Line
-from object.base.blank import Blank, BlankFunction
+from object.base.blank import Blank
 
 
 class Window:
@@ -35,14 +35,14 @@ class Window:
     def W_base(self, garo: float, sero: float, frame_garo: float, frame_sero: float) -> list:
 
         self.setOuterCords([[0,0], [0,sero], [garo,0], [garo,sero]])
-        self.blank = BlankFunction.nemo(Cord(0,0), Cord(garo, sero))
+        self.blank = NemoBlank(Cord(0,0), Cord(garo, sero))
 
 
         lines = []
         dy = (sero - frame_sero)/2
-        lines += BlankFunction.nemo(Cord(0, dy),
+        lines += NemoBlank(Cord(0, dy),
                                     Cord(frame_garo, dy+frame_sero)).toLines()
-        lines += BlankFunction.nemo(Cord(garo-frame_garo, dy),
+        lines += NemoBlank(Cord(garo-frame_garo, dy),
                                     Cord(garo, dy+frame_sero)).toLines()
 
         lines.append(Line(Cord(frame_garo, dy), Cord(garo-frame_garo, dy)))
@@ -55,7 +55,7 @@ class Window:
 
     def setOuterCords(self, cords: list):
         for c in cords:
-            self.outerCords.append(CordFunction.list2cord(c))
+            self.outerCords.append(Cord(c[0],c[1]))
 
     def getOuterLBCord(self):
         min_y = None
